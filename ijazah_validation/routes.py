@@ -1,15 +1,16 @@
 from flask import render_template, url_for, flash, redirect, request
-from ktp_validation.forms import RecognitionForm
-from ktp_validation import app
+from ijazah_validation.forms import RecognitionForm
+from ijazah_validation import app
 
 from PIL import Image
 from datetime import datetime
 
 import os
 import shutil
-import ktp_validation.functions as functions
-import ktp_validation.jpg_to_txt as jpg_to_txt
-import ktp_validation.validity_check_ktp as vc_ktp
+import ijazah_validation.functions as functions
+import ijazah_validation.jpg_to_txt as jpg_to_txt
+import ijazah_validation.validity_check_ijazah as vc_ijazah
+import ijazah_validation.validity_check_ijazah as vc_ijazah
 
 def find_the_highest_score(type, list, output_directory, name='', dob='', nik='', institution='', degree='', gpa='', english_score=''):
 
@@ -26,7 +27,7 @@ def find_the_highest_score(type, list, output_directory, name='', dob='', nik=''
         elif type == 'ktp':
             result_vc = vc_ktp.main(output_directory + file, name, dob, nik)
         elif type == 'ijazah':
-            result_vc = vc_ijazah.main(output_directory + file, name, institution, degree)
+            result_vc = vc_ijazah.main(output_directory + file, name, institution)
         elif type == 'transkrip':
             result_vc = vc_transkrip.main(output_directory + file, name, gpa)
         elif type == 'toefl':
@@ -48,17 +49,17 @@ def find_the_highest_score(type, list, output_directory, name='', dob='', nik=''
 
     return result
 
-def save_picture(ktp):
-    img = Image.open(ktp)
+def save_picture(ijazah):
+    img = Image.open(ijazah)
 
     current_timestamps = datetime.now().strftime("%d%m%Y-%H%M%S")
-    ktp_fn = current_timestamps + '_' + 'ktp.jpg'
+    ijazah_fn = current_timestamps + '_' + 'ijazah.jpg'
 
-    img.save(os.path.join(app.root_path, 'static', 'ktp', ktp_fn))
+    img.save(os.path.join(app.root_path, 'static', 'ijazah', ijazah_fn))
 
-    return ktp_fn
+    return ijazah_fn
 
-def clean_folder(folder='ktp_validation/static/ktp/'):
+def clean_folder(folder='ijazah_validation/static/ijazah/'):
     for filename in os.listdir(folder):
         file_path = os.path.join(folder, filename)
         try:
@@ -84,30 +85,27 @@ def home():
 
         if form.validate_on_submit():
             clean_folder()
-            ktp_file = save_picture(form.ktp.data)
-            image_file = url_for('static', filename='ktp/'+ktp_file)
+            ijazah_file = save_picture(form.ijazah.data)
+            image_file = url_for('static', filename='ijazah/'+ijazah_file)
 
             name = request.form['name']
-            nik = request.form['nik']
-            dob = request.form['dob']
+            institution = request.form['institution']
 
-            jpg_to_txt.main('ktp_validation/static/ktp/')
+            jpg_to_txt.main('ijazah_validation/static/ijazah/')
 
             input_data = {
                 'name': name,
-                'dob': dob,
-                'nik': nik 
+                'institution': institution 
             }
 
-            list_of_txt_files = os.listdir('ktp_validation/static/ktp/output/')
+            list_of_txt_files = os.listdir('ijazah_validation/static/ijazah/output/')
             
-            ktp = find_the_highest_score('ktp', list_of_txt_files, 'ktp_validation/static/ktp/output/', \
+            ijazah = find_the_highest_score('ijazah', list_of_txt_files, 'ijazah_validation/static/ijazah/output/', \
                                         name=name, \
-                                        dob=dob, \
-                                        nik=nik)
+                                        institution=institution)
 
             flash(f'Success', 'success')
-            return render_template('home.html', form=form, image_file=image_file, input_data=input_data, recognition=ktp)
+            return render_template('home.html', form=form, image_file=image_file, input_data=input_data, recognition=ijazah)
 
 
         return render_template('home.html', form=form, image_file=image_file, input_data=None)

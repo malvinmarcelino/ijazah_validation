@@ -12,13 +12,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}">
 
-    <title>KTP Validation</title>
+    <title>Ijazah Validation</title>
 </head>
 <body>
     <header class="site-header">
         <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
             <div class="container">
-            <a class="navbar-brand mr-4" href="{{ url_for('home') }}">KTP Validation</a>
+            <a class="navbar-brand mr-4" href="{{ url_for('home') }}">Ijazah Validation</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -47,10 +47,10 @@
                             <legend class="border-bottom mb-4">Validation Input</legend>
 
                             <div class="form-group">
-                                {{ form.ktp.label(class="form-control-label") }}
-                                {{ form.ktp(class="form-control-file") }}
-                                {% if form.ktp.errors %}
-                                    {% for error in form.ktp.errors %}
+                                {{ form.ijazah.label(class="form-control-label") }}
+                                {{ form.ijazah(class="form-control-file") }}
+                                {% if form.ijazah.errors %}
+                                    {% for error in form.ijazah.errors %}
                                         <span class="text-danger">{{ error }}</span>
                                     {% endfor %}
                                 {% endif %}
@@ -72,34 +72,20 @@
                             </div>
 
                             <div class="form-group">
-                                {{ form.nik.label(class="form-control-label") }}
+                                {{ form.institution.label(class="form-control-label") }}
 
-                                {% if form.nik.errors %}
-                                    {{ form.nik(class="form-control form-control-lg is-invalid") }}
+                                {% if form.institution.errors %}
+                                    {{ form.institution(class="form-control form-control-lg is-invalid") }}
                                     <div class="invalid-feedback">
-                                        {% for error in form.nik.errors %}
+                                        {% for error in form.institution.errors %}
                                             <span>{{ error }}</span>
                                         {% endfor %}
                                     </div>
                                 {% else %}
-                                    {{ form.nik(class="form-control form-control-lg") }}
+                                    {{ form.institution(class="form-control form-control-lg") }}
                                 {% endif %}
                             </div>
 
-                            <div class="form-group">
-                                {{ form.dob.label(class="form-control-label") }}
-
-                                {% if form.dob.errors %}
-                                    {{ form.dob(class="form-control form-control-lg is-invalid") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.nik.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.dob(class="form-control form-control-lg") }}
-                                {% endif %}
-                            </div>
                         </fieldset>
                         <div class="form-group">
                             {{ form.submit(class="btn btn-info") }}
@@ -124,22 +110,19 @@
                         <thead>
                             <th></th>
                             <th>Name</th>
-                            <th>NIK</th>
-                            <th>Date Of Birth</th>
+                            <th>Institution</th>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>input</td>
                                 <td>{{ input_data['name'] }}</td>
-                                <td>{{ input_data['nik'] }}</td>
-                                <td>{{ input_data['dob'] }}</td>
+                                <td>{{ input_data['institution'] }}</td>
                             </tr>
                             
                             <tr>
                                 <td>recognition</td>
                                 <td>{{ recognition['name']['result'] }}</td>
-                                <td>{{ recognition['nik']['result'] }}</td>
-                                <td>{{ recognition['dob']['result'] }}</td>
+                                <td>{{ recognition['institution']['result'] }}</td>
                             </tr>
 
                             <tr>
@@ -153,20 +136,12 @@
                                 {{ '%0.2f' | format(recognition['name']['score']|float) }}
                                 </td>
 
-                                {% if recognition['nik']['score'] >= 0.9 %}
+                                {% if recognition['institution']['score'] >= 0.9 %}
                                 <td class="table-success">
                                 {% else %}
                                 <td class="table-danger">
                                 {% endif %}
-                                {{ '%0.2f' | format(recognition['nik']['score']|float) }}
-                                </td>
-
-                                {% if recognition['dob']['score'] >= 0.95 %}
-                                <td class="table-success">
-                                {% else %}
-                                <td class="table-danger">
-                                {% endif %}
-                                {{ '%0.2f' | format(recognition['dob']['score']|float) }}
+                                {{ '%0.2f' | format(recognition['institution']['score']|float) }}
                                 </td>
                             </tr>
                         </tbody>
@@ -176,29 +151,25 @@
                         <thead>
                             <th></th>
                             <th>Name</th>
-                            <th>NIK</th>
-                            <th>Date Of Birth</th>
+                            <th>Institution</th>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>input</td>
                                 <td>input_name</td>
-                                <td>input_nik</td>
-                                <td>input_dob</td>
+                                <td>input_institution</td>
                             </tr>
                             
                             <tr>
                                 <td>recognition</td>
                                 <td>recog_name</td>
-                                <td>recog_nik</td>
-                                <td>recog_dob</td>
+                                <td>recog_institution</td>
                             </tr>
 
                             <tr>
                                 <td>validity</td>
                                 <td>validity_name</td>
-                                <td>validity_nik</td>
-                                <td>validity_dob</td>
+                                <td>validity_institution</td>
                             </tr>
                         </tbody>
                 {% endif %}

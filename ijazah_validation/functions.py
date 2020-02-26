@@ -202,7 +202,7 @@ def create_folder_and_download_files(data):
 
     # Get applicant name and current datetime
     try:
-        applicant_name = data['ktp']['name']
+        applicant_name = data['ijazah']['name']
     except:
         applicant_name = data['akta']['name']
     
@@ -215,9 +215,9 @@ def create_folder_and_download_files(data):
     
     # Download pdf files and save it to a specific path
     try:
-        pdf_ktp = base64.b64decode(data['ktp']['pdf_url'])
-        pdf_file = open(applicant_path + '/ktp_' + applicant_name + '.pdf','wb')
-        pdf_file.write(pdf_ktp)
+        pdf_ijazah = base64.b64decode(data['ijazah']['pdf_url'])
+        pdf_file = open(applicant_path + '/ijazah_' + applicant_name + '.pdf','wb')
+        pdf_file.write(pdf_ijazah)
         pdf_file.close()
     except:
         pdf_akta = base64.b64decode(data['akta']['pdf_url'])

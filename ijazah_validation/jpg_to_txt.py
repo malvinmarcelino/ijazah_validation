@@ -16,13 +16,13 @@ def convertPIL(img):
 
     return img
 
-def preprocessing_ktp(img):
+def preprocessing_ijazah(img):
 
     if not isinstance(img, np.ndarray):
         img = convertPIL(img)
-    
-    alpha = 4.0
-    beta = -160
+
+    alpha = 4.5
+    beta = -150
     new = alpha * img + beta
     new = np.clip(new, 0, 255).astype(np.uint8)
     kernel = np.ones((2, 2), np.uint8)
@@ -30,24 +30,23 @@ def preprocessing_ktp(img):
     new = cv2.erode(new, kernel, iterations=1)
     new = cv2.erode(new, kernel1, iterations=12)
     new = cv2.blur(new, (2, 2))
-    # ret,new = cv2.threshold(new,100,255,cv2.THRESH_TOZERO)
-    new = cv2.cvtColor(new, cv2.COLOR_BGR2GRAY)
-    ret, new = cv2.threshold(new, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    ret, new = cv2.threshold(new, 100, 255, cv2.THRESH_TOZERO)
 
     return new
 
 def convert_jpg_to_txt(image_path, output_path):
     image = Image.open(image_path)
     
-    processed_image = preprocessing_ktp(image)
+    processed_image = preprocessing_ijazah(image)
     
-    text = tesserocr.image_to_text(Image.fromarray(processed_image), lang='ind', path='ktp_validation/model/')
+    
+    text = tesserocr.image_to_text(Image.fromarray(processed_image), lang='ind')
 
     with io.open(output_path + 'ocr.txt', mode='w', encoding='utf8') as file:
         file.write(text)
 
-    with io.open(output_path + 'ocr_NIK.txt', mode='w', encoding='utf8') as file:
-        file.write(tesserocr.image_to_text(Image.fromarray(processed_image), lang='ktp', path='ktp_validation/model/'))
+    # with io.open(output_path + 'ocr_NIK.txt', mode='w', encoding='utf8') as file:
+    #    file.write(tesserocr.image_to_text(Image.fromarray(processed_image), lang='ijazah', path='ijazah_validation/model/'))
 
 # Main function, will loop through the parent document and convert all of the pdf files
 def main(parent_directory):
@@ -59,6 +58,6 @@ def main(parent_directory):
     files = os.listdir(parent_directory)
     
     for file in files:
-        if 'ktp' in file.lower():
+        if 'ijazah' in file.lower():
             convert_jpg_to_txt(parent_directory + file, parent_directory + 'output/')
     # Parallel(n_jobs=num_cores, prefer='threads')(delayed(send_to_google_vision)(file, parent_directory) for file in files)

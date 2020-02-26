@@ -1,12 +1,12 @@
-# ktp_validation
+# Ijazah_Validation
 
-This web app can be used as KTP validator. User will input:
-* KTP Image (`*.jpg`, `*.jpeg`, `*.png`)
-* Name in KTP
-* NIK
-* Date of birth in KTP
+This is a Web-Based Ijazah Validation that will search and compare to an user input using OCR.
 
-The app will validate between user's inputs and the content of KTP. It uses OCR (Optical Character Recognition) to extract information from KTP.
+The input will be:
+* Ijazah Image (.jpg only)
+* Name of the person
+* Institution Name
+
 
 ## Prerequisite
 To run this program, Tesseract must be installed on your computer. Follow this [link](https://github.com/tesseract-ocr/tesseract/wiki) for further info.
